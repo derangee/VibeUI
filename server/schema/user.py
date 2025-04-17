@@ -4,6 +4,7 @@ from pydantic import BaseModel, EmailStr
 # Shared properties
 class UserBase(BaseModel):
     email: EmailStr
+    user_id: str
 
 
 # Properties to receive on user creation

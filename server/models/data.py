@@ -8,7 +8,8 @@ class Data(Base):
     __tablename__ = "datas"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    u_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(String, ForeignKey("users.user_id"))
     brand_name = Column(String, index=True)
     brand_description = Column(Text, nullable=True)
     industry = Column(String)
@@ -18,6 +19,6 @@ class Data(Base):
     secondary_color = Column(String, nullable=True)
     accent_color = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    
-    # Relationship with User
-    owner = relationship("User", back_populates="datas")
+
+    user_by_id = relationship("User", back_populates="datas", foreign_keys=[u_id])
+    user_by_user_id = relationship("User", back_populates="datas_by_user_id", foreign_keys=[user_id])
