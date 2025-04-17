@@ -80,7 +80,7 @@ const CodeBlock = ({ code, language = 'jsx' }) => {
     </div>
   );
 };
-
+  
 // Component example with code and preview tabs
 const ComponentExample = ({ title, description, preview, code, defaultTab = 'preview', showVariants = false }) => {
   const [activeTab, setActiveTab] = useState(defaultTab);

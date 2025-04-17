@@ -85,7 +85,7 @@ const DashboardHome = () => {
         <DashboardCard 
           title="Team Members" 
           icon={Users} 
-          value="5" 
+          value="4" 
           color="bg-orange-600" 
         />
       </div>
@@ -158,7 +158,7 @@ const DashboardHome = () => {
               color="bg-blue-600"
             />
             <RecentActivity 
-              date="3 days ago"
+              date="7h ago"
               title="Template saved"
               description="Saved 'Dashboard UI Kit' to your templates"
               icon={Save}
