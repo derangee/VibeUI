@@ -1,1 +1,7 @@
-print("Hello from the server!")
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def home():
+    return {"message": "Hello World"}
