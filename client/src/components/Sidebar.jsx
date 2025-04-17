@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   ChevronDown, 
@@ -8,13 +8,20 @@ import {
   Save, 
   Settings,
   Users,
-  BarChart,
   FileText,
   HelpCircle,
-  Mail
+  Square,
+  Layout,
+  Type,
+  Table,
+  SlidersHorizontal,
+  BookOpen,
+  Code,
+  FileCode,
+  Clock
 } from 'lucide-react';
 
-// Menu data structure with routes
+// Updated menu data structure with routes matching App.jsx
 const SIDEBAR_MENU = [
   {
     id: 'dashboard',
@@ -28,13 +35,13 @@ const SIDEBAR_MENU = [
     title: 'Components',
     icon: Layers,
     hasChildren: true,
-    path: '/components',
+    path: '/dashboard/components',
     children: [
-      { id: 'buttons', title: 'Buttons', path: '/components/buttons' },
-      { id: 'cards', title: 'Cards', path: '/components/cards' },
-      { id: 'forms', title: 'Forms', path: '/components/forms' },
-      { id: 'tables', title: 'Tables', path: '/components/tables' },
-      { id: 'modals', title: 'Modals', path: '/components/modals' }
+      { id: 'buttons', title: 'Buttons', path: '/dashboard/components/buttons', icon: Square },
+      { id: 'cards', title: 'Cards', path: '/dashboard/components/cards', icon: Layout },
+      { id: 'forms', title: 'Forms', path: '/dashboard/components/forms', icon: Type },
+      { id: 'tables', title: 'Tables', path: '/dashboard/components/tables', icon: Table },
+      { id: 'modals', title: 'Modals', path: '/dashboard/components/modals', icon: SlidersHorizontal }
     ]
   },
   {
@@ -42,11 +49,11 @@ const SIDEBAR_MENU = [
     title: 'Saved Components',
     icon: Save,
     hasChildren: true,
-    path: '/saved-components',
+    path: '/dashboard/saved-components',
     children: [
-      { id: 'project-a', title: 'Project A', path: '/saved-components/project-a' },
-      { id: 'project-b', title: 'Project B', path: '/saved-components/project-b' },
-      { id: 'recent', title: 'Recent', path: '/saved-components/recent' }
+      { id: 'project-a', title: 'Project A', path: '/dashboard/saved-components/project-a', icon: FileCode },
+      { id: 'project-b', title: 'Project B', path: '/dashboard/saved-components/project-b', icon: FileCode },
+      { id: 'recent', title: 'Recent', path: '/dashboard/saved-components/recent', icon: Clock }
     ]
   },
   {
@@ -54,11 +61,11 @@ const SIDEBAR_MENU = [
     title: 'Documents',
     icon: FileText,
     hasChildren: true,
-    path: '/documents',
+    path: '/dashboard/documents',
     children: [
-      { id: 'tutorials', title: 'Tutorials', path: '/documents/tutorials' },
-      { id: 'api-docs', title: 'API Docs', path: '/documents/api-docs' },
-      { id: 'guidelines', title: 'Guidelines', path: '/documents/guidelines' }
+      { id: 'tutorials', title: 'Tutorials', path: '/dashboard/documents/tutorials', icon: BookOpen },
+      { id: 'api-docs', title: 'API Docs', path: '/dashboard/documents/api-docs', icon: Code },
+      { id: 'guidelines', title: 'Guidelines', path: '/dashboard/documents/guidelines', icon: HelpCircle }
     ]
   },
   {
@@ -66,7 +73,7 @@ const SIDEBAR_MENU = [
     title: 'Settings',
     icon: Settings,
     hasChildren: false,
-    path: '/settings'
+    path: '/dashboard/settings'
   },
 ];
 
@@ -76,7 +83,7 @@ const Sidebar = () => {
   const [openSections, setOpenSections] = useState({});
   
   // Initialize open sections based on current path
-  React.useEffect(() => {
+  useEffect(() => {
     const currentPath = location.pathname;
     const updatedOpenSections = {};
     
@@ -88,7 +95,7 @@ const Sidebar = () => {
           currentPath.startsWith(child.path) || currentPath === child.path
         );
         
-        if (isChildActive) {
+        if (isChildActive || currentPath === item.path) {
           updatedOpenSections[item.id] = true;
         }
       }
@@ -115,7 +122,13 @@ const Sidebar = () => {
   
   // Check if a route is active
   const isRouteActive = (path) => {
-    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+    return location.pathname === path || 
+           (path !== '/dashboard' && location.pathname.startsWith(`${path}/`));
+  };
+  
+  // Special case for dashboard home
+  const isDashboardActive = () => {
+    return location.pathname === '/dashboard';
   };
   
   // Handle click on a menu item
@@ -128,7 +141,7 @@ const Sidebar = () => {
   // Render a menu item
   const renderMenuItem = (item) => {
     const isOpen = isSectionOpen(item.id);
-    const isActive = isRouteActive(item.path);
+    const isActive = item.id === 'dashboard' ? isDashboardActive() : isRouteActive(item.path);
     const Icon = item.icon;
     
     return (
@@ -164,19 +177,28 @@ const Sidebar = () => {
         
         {item.hasChildren && isOpen && (
           <div className="ml-8 mt-1 space-y-1">
-            {item.children.map(child => (
-              <Link
-                key={child.id}
-                to={child.path}
-                className={`block p-2 rounded-md transition-colors ${
-                  isRouteActive(child.path) 
-                    ? 'bg-gray-700 text-white' 
-                    : 'text-gray-400 hover:bg-gray-700 hover:text-white'
-                }`}
-              >
-                {child.title}
-              </Link>
-            ))}
+            {item.children.map(child => {
+              const ChildIcon = child.icon;
+              
+              return (
+                <Link
+                  key={child.id}
+                  to={child.path}
+                  className={`flex items-center p-2 rounded-md transition-colors ${
+                    isRouteActive(child.path) 
+                      ? 'bg-gray-700 text-white' 
+                      : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                  }`}
+                >
+                  {ChildIcon && (
+                    <span className="mr-2">
+                      <ChildIcon size={16} />
+                    </span>
+                  )}
+                  <span>{child.title}</span>
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>
