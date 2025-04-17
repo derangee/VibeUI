@@ -11,10 +11,10 @@ const LoginPage = lazy(() => import("./pages/login"));
 // Component pages - lazy loaded
 const ComponentsOverview = lazy(() => import("./pages/components/ComponentsOverview"));
 const ButtonsPage = lazy(() => import("./pages/components/ButtonsPage"));
-// const CardsPage = lazy(() => import("./pages/components/CardsPage"));
-// const FormsPage = lazy(() => import("./pages/components/FormsPage"));
-// const TablesPage = lazy(() => import("./pages/components/TablesPage"));
-// const ModalsPage = lazy(() => import("./pages/components/ModalsPage"));
+const ProgressBarPage = lazy(() => import("./pages/components/ProgressBarPage"));
+const RatingsPage = lazy(() => import("./pages/components/RatingsPage"));
+const NavbarPage = lazy(() => import("./pages/components/NavbarPage"));
+const MenuPage = lazy(() => import("./pages/components/MenuPage"));
 
 // Document pages
 const DashboardHome = lazy(() => import("./pages/dashboard/DashboardHome"));
@@ -44,10 +44,10 @@ function App() {
             <Route path="components">
               <Route index element={<ComponentsOverview />} />
               <Route path="buttons" element={<ButtonsPage />} />
-              {/* <Route path="cards" element={<CardsPage />} />
-              <Route path="forms" element={<FormsPage />} />
-              <Route path="tables" element={<TablesPage />} />
-              <Route path="modals" element={<ModalsPage />} /> */}
+              <Route path="progressbar" element={<ProgressBarPage />} />
+              <Route path="ratings" element={<RatingsPage />} />
+              <Route path="navbar" element={<NavbarPage />} />
+              <Route path="menu" element={<MenuPage />} /> */}
             </Route>
             
             {/* Saved components routes */}
