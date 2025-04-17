@@ -13,11 +13,11 @@ class DataBase(BaseModel):
     accent_color: Optional[str] = None
 
 class DataCreate(DataBase):
-    user_id: str
+    user_id: int
 
 class DataOut(DataBase):
     id: int
-    user_id: str
+    user_id: int
     created_at: datetime
 
     class Config:
