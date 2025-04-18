@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 
 // Layout components
 import Dashboard from "./pages/Dashboard";
+import OnboardingPage from "./pages/Onboarding";
 
 // Auth and public pages
 const LandingPage = lazy(() => import("./pages/LandinPage"));
@@ -35,6 +36,7 @@ function App() {
           {/* Public routes */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<LoginPage />} />
+          <Route path="/onboard" element={<OnboardingPage />} />
           
           {/* Dashboard and components */}
           <Route path="/dashboard" element={<Dashboard />}>
@@ -47,7 +49,7 @@ function App() {
               <Route path="progressbar" element={<ProgressBarPage />} />
               <Route path="ratings" element={<RatingsPage />} />
               <Route path="navbar" element={<NavbarPage />} />
-              <Route path="menu" element={<MenuPage />} /> */}
+              <Route path="menu" element={<MenuPage />} />
             </Route>
             
             {/* Saved components routes */}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, AlertCircle, Sliders } from 'lucide-react';
 import { ProgressBar } from '../../library/ProgressBar';
-import Drawer from '../../components/Drawer';
+import { ProgressBarSource, ProgressBarPreview } from '../../library/ProgressBar';
 import CustomizeDrawer from '../../components/CustomizeDrawer';
 
 // Tabs Component
@@ -220,6 +220,8 @@ const ComponentExample = ({
         isOpen={isCustomizeOpen}
         onClose={() => setIsCustomizeOpen(false)}
         title={title}
+        code={ProgressBarSource}
+        preview={ProgressBarPreview}
       />
     </div>
   );

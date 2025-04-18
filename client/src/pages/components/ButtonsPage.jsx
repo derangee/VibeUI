@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Copy, Check, AlertCircle, Sliders, Mail, Github, ArrowRight, Settings } from 'lucide-react'; // Added missing imports
 import Button from '../../library/Button';
-import Drawer from '../../components/Drawer';
+import { ButtonSource, ButtonPreview } from '../../library/Button';
 import CustomizeDrawer from '../../components/CustomizeDrawer';
+
 
 // Tab component for switching between views
 const Tabs = ({ tabs, activeTab, onChange, onCustomize }) => {
@@ -222,6 +223,8 @@ const ComponentExample = ({ title, description, preview, code, defaultTab = 'pre
         isOpen={isCustomizeOpen}
         onClose={() => setIsCustomizeOpen(false)}
         title={title}
+        code={ButtonSource}
+        preview={ButtonPreview}
       />
     </div>
   );

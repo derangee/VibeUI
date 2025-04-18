@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Star, AlertCircle, Sliders, Copy, Check } from 'lucide-react';
-import Ratings from '../../library/Ratings';  // Changed to Ratings
-import Drawer from '../../components/Drawer';
+import Ratings from '../../library/Ratings';
+import { RatingsSource, RatingsPreview } from '../../library/Ratings';  // Changed to Ratings
 import CustomizeDrawer from '../../components/CustomizeDrawer';
 
 // Tab component for switching between views
@@ -188,6 +188,8 @@ const ComponentExample = ({ title, description, preview, code, defaultTab = 'pre
         isOpen={isCustomizeOpen}
         onClose={() => setIsCustomizeOpen(false)}
         title={title}
+        code={RatingsSource}
+        preview={RatingsPreview}
       />
     </div>
   );
