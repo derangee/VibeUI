@@ -23,7 +23,7 @@ VibeUI is the modern, AI-powered UI component wizard 🧙‍♂️ that whips up
 - Export components like a boss
 - Core component library online
 - Firebase-powered user authentication
-- Brand onboarding flow (a.k.a. “Pimp My Brand”)
+- Brand onboarding flow
 - Customization interface so intuitive even your dog could use it
 - Sexy dashboard
 
