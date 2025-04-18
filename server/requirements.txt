@@ -5,3 +5,6 @@ python-jose[cryptography]
 passlib 
 python-multipart
 python-dotenv
+httpx
+langchain
+langchain-groq

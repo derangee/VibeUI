@@ -128,6 +128,13 @@ const Ratings = ({
 };
 
 export default Ratings;
+
+const RatingsDemo = () => {
+
+  return ( <Ratings value={4} variant="primary" /> );
+};
+
+export { RatingsDemo };
 `;
 
 const RatingsPreview = ` <Ratings value={4}" /> `;

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { getAuth } from 'firebase/auth';
 import Drawer from './Drawer';
+import { app } from '../utils/firebase';
 
 const CustomizeDrawer = ({ 
   isOpen, 
@@ -11,6 +13,9 @@ const CustomizeDrawer = ({
 }) => {
   const [customizedCode, setCustomizedCode] = useState(code || '');
   const [livePreviewComponent, setLivePreviewComponent] = useState(preview);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState(null);
+  const auth = getAuth(app);
   
   // Update customizedCode when code prop changes
   useEffect(() => {
@@ -29,26 +34,58 @@ const CustomizeDrawer = ({
     }
   };
   
-  // Handle code regeneration
-  const handleRegenerateComponent = (currentCode) => {
-    // Here you would typically call an AI service to regenerate the code
-    // For this demo, we'll just add a simple variation
+  // Send the user prompt and component code to the FastAPI backend
+  const handleAICustomization = async (userPrompt, currentCode) => {
+    if (!userPrompt || !currentCode) {
+      setError("Missing prompt or code");
+      return null;
+    }
     
-    const variations = [
-      { from: 'rounded-lg', to: 'rounded-xl' },
-      { from: 'px-4 py-2', to: 'px-5 py-3' },
-      { from: 'text-white', to: 'text-white font-bold' }
-    ];
-    
-    // Apply a random variation
-    const randomVariation = variations[Math.floor(Math.random() * variations.length)];
-    const updatedCode = currentCode.replace(
-      randomVariation.from, 
-      randomVariation.to
-    );
-    
-    setCustomizedCode(updatedCode);
-    return updatedCode;
+    try {
+      setIsProcessing(true);
+      setError(null);
+      
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+      
+      // Send request to our FastAPI backend
+      const response = await fetch('http://localhost:8000/api/customize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: user.uid,
+          component_name: title || "Unknown Component",
+          component_code: currentCode,
+          user_prompt: userPrompt
+        }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to customize component");
+      }
+      
+      const data = await response.json();
+      setCustomizedCode(data.modified_code);
+      
+      return data.modified_code;
+    } catch (err) {
+      setError(err.message || "An error occurred during customization");
+      console.error("Error customizing component:", err);
+      return null;
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+  
+  // Handle code regeneration - now uses the AI service
+  const handleRegenerateComponent = async (currentCode, userPrompt) => {
+    const modifiedCode = await handleAICustomization(userPrompt, currentCode);
+    return modifiedCode || currentCode;
   };
   
   return (
@@ -62,6 +99,9 @@ const CustomizeDrawer = ({
       }}
       onSave={handleSaveComponent}
       onRegenerateComponent={handleRegenerateComponent}
+      isProcessing={isProcessing}
+      error={error}
+      aiCustomization={handleAICustomization}
     />
   );
 };

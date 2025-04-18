@@ -183,6 +183,23 @@ const Button = ({
 };
 
 export default Button;
+
+const DemoButton = () => {
+  return (
+    <Button 
+      variant="primary" 
+      size="md" 
+      loading={false} 
+      fullWidth={false} 
+      icon={<Loader />} 
+      iconPosition="left"
+    >
+      Primary Button
+    </Button>
+  );
+}
+
+export { DemoButton };
 `;
 
 const ButtonPreview = `<button>  Primary Button  </button>`;
