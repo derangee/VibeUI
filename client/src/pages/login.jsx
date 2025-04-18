@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { app } from "../utils/firebase";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isSignup, setIsSignup] = useState(false); 
+  const [isSignup, setIsSignup] = useState(false);
   const navigate = useNavigate();
 
   const handleFormSubmit = async (e) => {
@@ -17,11 +23,19 @@ const LoginPage = () => {
     try {
       if (isSignup) {
         // Signup logic
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        console.log("User signed up:", {
+          uid: userCredential.user.uid,
+          email: userCredential.user.email,
+        });
         navigate("/dashboard"); // Redirect to dashboard after signup
       } else {
         // Login logic
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        console.log("User logged in:", {
+          uid: userCredential.user.uid,
+          email: userCredential.user.email,
+        });
         navigate("/dashboard"); // Redirect to dashboard after login
       }
     } catch (err) {
@@ -34,8 +48,12 @@ const LoginPage = () => {
     const provider = new GoogleAuthProvider();
 
     try {
-      await signInWithPopup(auth, provider);
-      navigate("/dashboard"); 
+      const userCredential = await signInWithPopup(auth, provider);
+      console.log("User logged in with Google:", {
+        uid: userCredential.user.uid,
+        email: userCredential.user.email,
+      });
+      navigate("/dashboard");
     } catch (error) {
       setError(error.message);
     }

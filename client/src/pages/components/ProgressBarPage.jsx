@@ -77,6 +77,30 @@ const CodeBlock = ({ code, language = 'jsx' }) => {
   );
 };
 
+// Copyable CLI Box Component
+const CopyableCLIBox = ({ command }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(command);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="bg-gray-800 border border-gray-700 rounded-md p-4 flex items-center justify-between">
+      <code className="text-purple-400 font-mono text-sm">{command}</code>
+      <button
+        onClick={handleCopy}
+        className="text-gray-400 hover:text-white p-1.5 rounded hover:bg-gray-700"
+        title={copied ? 'Copied!' : 'Copy command'}
+      >
+        {copied ? <Check size={16} /> : <Copy size={16} />}
+      </button>
+    </div>
+  );
+};
+
 // Component Example with Tabs
 const ComponentExample = ({
   title,
@@ -225,6 +249,15 @@ const ProgressBarPage = () => {
             </p>
           </div>
         </div>
+      </div>
+
+        {/* Download via Command Line (CLI) */}
+            <div className="mb-8 p-4 rounded-md bg-gray-800/30 border border-gray-700">
+        <h3 className="font-medium text-white mb-2">Download via Command Line (CLI)</h3>
+        <p className="text-sm text-gray-400 mb-4">
+          Use the following command to add the progress bar component to your project:
+        </p>
+        <CopyableCLIBox command="npx vibeui-cli add progressbar" />
       </div>
 
       <ComponentExample

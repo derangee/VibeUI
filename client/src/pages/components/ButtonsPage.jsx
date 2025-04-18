@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Check, AlertCircle, ArrowRight, ChevronDown, Github, Mail, Settings, Sliders } from 'lucide-react';
+import { Copy, Check, AlertCircle, Sliders, Mail, Github, ArrowRight, Settings } from 'lucide-react'; // Added missing imports
 import Button from '../../library/Button';
 import Drawer from '../../components/Drawer';
 import CustomizeDrawer from '../../components/CustomizeDrawer';
@@ -80,12 +80,36 @@ const CodeBlock = ({ code, language = 'jsx' }) => {
     </div>
   );
 };
-  
+
+// Copyable CLI Box Component
+const CopyableCLIBox = ({ command }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(command);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="bg-gray-800 border border-gray-700 rounded-md p-4 flex items-center justify-between">
+      <code className="text-purple-400 font-mono text-sm">{command}</code>
+      <button
+        onClick={handleCopy}
+        className="text-gray-400 hover:text-white p-1.5 rounded hover:bg-gray-700"
+        title={copied ? 'Copied!' : 'Copy command'}
+      >
+        {copied ? <Check size={16} /> : <Copy size={16} />}
+      </button>
+    </div>
+  );
+};
+
 // Component example with code and preview tabs
 const ComponentExample = ({ title, description, preview, code, defaultTab = 'preview', showVariants = false }) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
-  
+
   const tabs = [
     { label: 'Preview', value: 'preview' },
     { label: 'Code', value: 'code' },
@@ -101,23 +125,23 @@ const ComponentExample = ({ title, description, preview, code, defaultTab = 'pre
         <h3 className="text-lg font-medium text-white">{title}</h3>
         {description && <p className="text-gray-400 text-sm mt-1">{description}</p>}
       </div>
-      
-      <Tabs 
-        tabs={tabs} 
-        activeTab={activeTab} 
-        onChange={setActiveTab} 
+
+      <Tabs
+        tabs={tabs}
+        activeTab={activeTab}
+        onChange={setActiveTab}
         onCustomize={() => setIsCustomizeOpen(true)}
       />
-      
+
       <div className="p-6">
         {activeTab === 'preview' && (
           <div className="flex flex-wrap items-center gap-4">
             {preview}
           </div>
         )}
-        
+
         {activeTab === 'code' && <CodeBlock code={code} />}
-        
+
         {activeTab === 'props' && showVariants && (
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
@@ -193,9 +217,9 @@ const ComponentExample = ({ title, description, preview, code, defaultTab = 'pre
           </div>
         )}
       </div>
-      
-      <CustomizeDrawer 
-        isOpen={isCustomizeOpen} 
+
+      <CustomizeDrawer
+        isOpen={isCustomizeOpen}
         onClose={() => setIsCustomizeOpen(false)}
         title={title}
       />
@@ -204,7 +228,7 @@ const ComponentExample = ({ title, description, preview, code, defaultTab = 'pre
 };
 
 // Main component page
-const ButtonPage = () => {
+const ButtonsPage = () => {
   return (
     <div className="max-w-full pb-12">
       <div className="mb-8">
@@ -213,7 +237,7 @@ const ButtonPage = () => {
           Buttons allow users to trigger an action or event with a single click.
         </p>
       </div>
-      
+
       <div className="mb-8 p-4 rounded-md bg-gray-800/30 border border-gray-700">
         <div className="flex items-start gap-3">
           <div className="p-1.5 rounded-full bg-purple-600/20 text-purple-500 flex-shrink-0">
@@ -229,6 +253,15 @@ const ButtonPage = () => {
         </div>
       </div>
 
+      {/* Download via Command Line (CLI) */}
+      <div className="mb-8 p-4 rounded-md bg-gray-800/30 border border-gray-700">
+        <h3 className="font-medium text-white mb-2">Download via Command Line (CLI)</h3>
+        <p className="text-sm text-gray-400 mb-4">
+          Use the following command to add the button component to your project:
+        </p>
+        <CopyableCLIBox command="npx vibeui-cli add button" />
+      </div>
+
       {/* Basic Example */}
       <ComponentExample
         title="Basic Button"
@@ -240,7 +273,7 @@ export default function Example() {
   return <Button>Button</Button>;
 }`}
       />
-      
+
       {/* Variants */}
       <ComponentExample
         title="Variants"
@@ -249,9 +282,6 @@ export default function Example() {
           <>
             <Button>Primary</Button>
             <Button variant="secondary">Secondary</Button>
-            {/* <Button variant="success">Success</Button>
-            <Button variant="danger">Danger</Button>
-            <Button variant="warning">Warning</Button> */}
             <Button variant="outline">Outline</Button>
             <Button variant="ghost">Ghost</Button>
           </>
@@ -263,9 +293,6 @@ export default function Example() {
     <>
       <Button>Primary</Button>
       <Button variant="secondary">Secondary</Button>
-      <Button variant="success">Success</Button>
-      <Button variant="danger">Danger</Button>
-      <Button variant="warning">Warning</Button>
       <Button variant="outline">Outline</Button>
       <Button variant="ghost">Ghost</Button>
     </>
@@ -273,7 +300,7 @@ export default function Example() {
 }`}
         showVariants={true}
       />
-      
+
       {/* Sizes */}
       <ComponentExample
         title="Sizes"
@@ -298,7 +325,7 @@ export default function Example() {
 }`}
         showVariants={true}
       />
-      
+
       {/* Icons */}
       <ComponentExample
         title="Icons"
@@ -326,7 +353,7 @@ export default function Example() {
 }`}
         showVariants={true}
       />
-      
+
       {/* Disabled State */}
       <ComponentExample
         title="Disabled State"
@@ -351,7 +378,7 @@ export default function Example() {
 }`}
         showVariants={true}
       />
-      
+
       {/* Loading State */}
       <ComponentExample
         title="Loading State"
@@ -376,12 +403,11 @@ export default function Example() {
 }`}
         showVariants={true}
       />
-      
-      
+
       {/* API Reference */}
       <div className="mt-16">
         <h2 className="text-2xl font-bold text-white mb-6">API Reference</h2>
-        
+
         <div className="overflow-x-auto mb-12">
           <table className="w-full border-collapse">
             <thead>
@@ -471,6 +497,6 @@ export default function Example() {
       </div>
     </div>
   );
-}
+};
 
-export default ButtonPage;
+export default ButtonsPage;
