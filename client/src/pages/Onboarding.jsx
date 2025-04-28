@@ -96,8 +96,8 @@ const OnboardingPage = () => {
         primary_color: primaryColor,
         secondary_color: secondaryColor,
         accent_color: accentColor,
-        user_id: "UChFhruzyeaglLkwD1yP27bHbbQ2",
-        u_id: 2,
+        user_id: "wvGfInB95eY6ReeLaMVZYQvreZp1",
+        u_id: 1,
       };
       
       const response = await fetch("http://localhost:8000/data", {

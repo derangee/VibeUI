@@ -19,7 +19,7 @@ const LoginPage = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const auth = getAuth(app);
-
+    console.log(auth);
     try {
       if (isSignup) {
         // Signup logic
@@ -28,15 +28,16 @@ const LoginPage = () => {
           uid: userCredential.user.uid,
           email: userCredential.user.email,
         });
-        navigate("/dashboard"); // Redirect to dashboard after signup
+        // Redirect to dashboard after signup
+        navigate("/onboard");
 
         try {
           // First create the Firebase authentication user
-          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-          console.log("User signed up:", {
-            uid: userCredential.user.uid,
-            email: userCredential.user.email,
-          });
+          // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          // console.log("User signed up:", {
+          //   uid: userCredential.user.uid,
+          //   email: userCredential.user.email,
+          // });
 
           // Then call your backend API to store the user in your database
           const response = await fetch('http://localhost:8000/users', {
@@ -49,18 +50,19 @@ const LoginPage = () => {
               user_id: userCredential.user.uid
             }),
           });
-
+          console.log("Response from backend:", response);  
           if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.detail || 'Failed to create user in database');
           }
-
+          
 
           navigate(`/onboard`); // Redirect to dashboard after signup
         } catch (error) {
           console.error("Error during signup:", error);
           // Handle error appropriately (show error message to user)
         }
+        
       } else {
         // Login logic
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -68,7 +70,8 @@ const LoginPage = () => {
           uid: userCredential.user.uid,
           email: userCredential.user.email,
         });
-        navigate("/onboard");
+        
+        navigate("/dashboard");
       }
     } catch (err) {
       setError(err.message);
@@ -85,7 +88,7 @@ const LoginPage = () => {
         uid: userCredential.user.uid,
         email: userCredential.user.email,
       });
-      navigate(`/oboard`);
+      navigate(`/onboard`);
     } catch (error) {
       setError(error.message);
     }
